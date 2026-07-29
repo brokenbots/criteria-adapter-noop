@@ -74,7 +74,12 @@ func (s *noopService) Execute(ctx context.Context, request *v2.ExecuteRequest, s
 	})
 }
 
-func (s *noopService) Log(_ context.Context, _ *v2.LogRequest, _ adapterhost.LogEventSender) error {
+func (s *noopService) Log(ctx context.Context, _ *v2.LogRequest, _ adapterhost.LogEventSender) error {
+	// Hold the stream open for the lifetime of the session. The adapter host
+	// runs the heartbeat ticker only while Log is executing; returning early
+	// would cancel it before a single heartbeat is sent, causing the host to
+	// declare the session crashed after its 90s stall threshold.
+	<-ctx.Done()
 	return nil
 }
 
