@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"testing"
+	"time"
 
 	v2 "github.com/brokenbots/criteria-adapter-proto/criteria/v2"
 )
@@ -11,6 +12,14 @@ import (
 type captureSink struct{ events []*v2.ExecuteEvent }
 
 func (c *captureSink) Send(e *v2.ExecuteEvent) error {
+	c.events = append(c.events, e)
+	return nil
+}
+
+// captureLogSender collects events emitted by Log.
+type captureLogSender struct{ events []*v2.LogEvent }
+
+func (c *captureLogSender) Send(e *v2.LogEvent) error {
 	c.events = append(c.events, e)
 	return nil
 }
@@ -71,5 +80,38 @@ func TestExecuteInvalidDelay(t *testing.T) {
 	}
 	if err := s.Execute(ctx, &v2.ExecuteRequest{SessionId: "s", Input: map[string]string{"delay_ms": "-1"}}, &captureSink{}); err == nil {
 		t.Fatal("expected error for negative delay_ms")
+	}
+}
+
+func TestLogHoldsStreamUntilContextCancelled(t *testing.T) {
+	s := &noopService{sessions: map[string]struct{}{}}
+	const sid = "s1"
+	ctx := context.Background()
+	if _, err := s.OpenSession(ctx, &v2.OpenSessionRequest{SessionId: sid}); err != nil {
+		t.Fatalf("OpenSession: %v", err)
+	}
+
+	logCtx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	done := make(chan error, 1)
+	go func() {
+		done <- s.Log(logCtx, &v2.LogRequest{SessionId: sid}, &captureLogSender{})
+	}()
+
+	select {
+	case <-done:
+		t.Fatal("Log returned before its context was cancelled")
+	case <-time.After(200 * time.Millisecond):
+	}
+
+	cancel()
+	select {
+	case err := <-done:
+		if err != nil {
+			t.Fatalf("Log returned unexpected error: %v", err)
+		}
+	case <-time.After(2 * time.Second):
+		t.Fatal("Log did not return promptly after context cancellation")
 	}
 }
