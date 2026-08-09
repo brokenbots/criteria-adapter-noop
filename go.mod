@@ -4,7 +4,7 @@ go 1.26.5
 
 require (
 	github.com/brokenbots/criteria-adapter-proto v0.5.1
-	github.com/brokenbots/criteria-go-adapter-sdk v0.5.2
+	github.com/brokenbots/criteria-go-adapter-sdk v0.5.3
 )
 
 require (

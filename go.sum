@@ -1,7 +1,7 @@
 github.com/brokenbots/criteria-adapter-proto v0.5.1 h1:URfvObjuA0S+AUSUyhXwfeikExEuqZeBzRGoHVZbicY=
 github.com/brokenbots/criteria-adapter-proto v0.5.1/go.mod h1:ZlnbfwK9phBl6XndXSjeaaCwwW3Y/pXTtq6ag2qqFjo=
-github.com/brokenbots/criteria-go-adapter-sdk v0.5.2 h1:pF0kV6qA0At8jmC4F4EdgmBb1aPiTX4tYDAA7JgNnLQ=
-github.com/brokenbots/criteria-go-adapter-sdk v0.5.2/go.mod h1:3pQRFTvoNJpgF6j09wVPA/n6XZnQGdnJ9jQyY5mGAjo=
+github.com/brokenbots/criteria-go-adapter-sdk v0.5.3 h1:2g1jeuqp5SS9eCS2IRdyUrAfQNeI2jUJD1jflP5CTWo=
+github.com/brokenbots/criteria-go-adapter-sdk v0.5.3/go.mod h1:AKUZmxRFnwZ/Fprz30PTkoliCQplQIQ8rfHwF2HRUlw=
 github.com/bufbuild/protocompile v0.14.1 h1:iA73zAf/fyljNjQKwYzUHD6AD4R8KMasmwa/FBatYVw=
 github.com/bufbuild/protocompile v0.14.1/go.mod h1:ppVdAIhbr2H8asPk6k4pY7t9zB1OU5DoEw9xY/FUi1c=
 github.com/cespare/xxhash/v2 v2.3.0 h1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UFvs=
