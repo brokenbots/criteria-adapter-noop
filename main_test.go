@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"testing"
-	"time"
 
 	v2 "github.com/brokenbots/criteria-adapter-proto/criteria/v2"
+	adapterhost "github.com/brokenbots/criteria-go-adapter-sdk/adapterhost"
 )
 
 // captureSink collects events emitted by Execute.
@@ -37,6 +37,20 @@ func TestInfo(t *testing.T) {
 	}
 	if len(resp.GetPlatforms()) == 0 {
 		t.Error("platforms must be set for a multi-arch publish")
+	}
+
+	// The capabilities gate which host features the adapter may use: the
+	// tool-call caller mode requires adapter_tools on top of parallel_safe
+	// (CRI-159).
+	caps := map[string]bool{}
+	for _, c := range resp.GetCapabilities() {
+		caps[c] = true
+	}
+	if !caps["parallel_safe"] {
+		t.Error("capabilities must include parallel_safe")
+	}
+	if !caps[adapterhost.CapabilityAdapterTools] {
+		t.Error("capabilities must include adapter_tools for the tool-call caller mode")
 	}
 }
 
@@ -83,7 +97,10 @@ func TestExecuteInvalidDelay(t *testing.T) {
 	}
 }
 
-func TestLogHoldsStreamUntilContextCancelled(t *testing.T) {
+// TestLogReturnsPromptly pins the SDK-owned log-stream contract: the adapter's
+// Log returns immediately and never emits log events; the SDK keeps the
+// stream and its heartbeat alive for the full session lifetime.
+func TestLogReturnsPromptly(t *testing.T) {
 	s := &noopService{sessions: map[string]struct{}{}}
 	const sid = "s1"
 	ctx := context.Background()
@@ -91,27 +108,11 @@ func TestLogHoldsStreamUntilContextCancelled(t *testing.T) {
 		t.Fatalf("OpenSession: %v", err)
 	}
 
-	logCtx, cancel := context.WithCancel(ctx)
-	defer cancel()
-
-	done := make(chan error, 1)
-	go func() {
-		done <- s.Log(logCtx, &v2.LogRequest{SessionId: sid}, &captureLogSender{})
-	}()
-
-	select {
-	case <-done:
-		t.Fatal("Log returned before its context was cancelled")
-	case <-time.After(200 * time.Millisecond):
+	sender := &captureLogSender{}
+	if err := s.Log(ctx, &v2.LogRequest{SessionId: sid}, sender); err != nil {
+		t.Fatalf("Log: %v", err)
 	}
-
-	cancel()
-	select {
-	case err := <-done:
-		if err != nil {
-			t.Fatalf("Log returned unexpected error: %v", err)
-		}
-	case <-time.After(2 * time.Second):
-		t.Fatal("Log did not return promptly after context cancellation")
+	if len(sender.events) != 0 {
+		t.Errorf("Log emitted %d events, want 0 (the SDK owns heartbeats)", len(sender.events))
 	}
 }
