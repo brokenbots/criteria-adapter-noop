@@ -1,6 +1,6 @@
 module github.com/brokenbots/criteria-adapter-noop
 
-go 1.26.6
+go 1.26.9
 
 require (
 	github.com/brokenbots/criteria-adapter-proto v0.5.2-0.20260915031317-3884049505b7
