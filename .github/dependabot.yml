@@ -1,37 +1,32 @@
+# devops_maint_v1 Lane B — org dependabot policy for Go repos (KB-408,
+# ADR-0015 wave 3). Applied per repo as .github/dependabot.yml.
+#
+# Policy (ADR-0015 Lane B item 2):
+#   - weekly cadence for every in-scope ecosystem
+#   - minor+patch bumps grouped into ONE PR per ecosystem
+#   - majors stay OUTSIDE the group on purpose: they arrive as separate PRs and
+#     the devops_maint_v1 classify gate routes semver-major bumps to the
+#     needs_judgment lane — never auto-acted. Do not add a semver-major entry.
 version: 2
-
-# Dependency-freshness & supply-chain policy: docs/dependency-policy.md
-#
-# Dependabot owns only the routine minor/patch lane. A Go major is a module-path
-# (/vN) change driven by `gomajor` (see `make deps-majors`), which Dependabot
-# cannot perform — majors it raises are SIGNALS, not merge-ready PRs. Freshness
-# is tracked by `make deps-outdated` (go-mod-outdated), not by this file.
-#
-# Every ecosystem carries a 7-day cooldown so a freshly-published (possibly
-# compromised) release is not ingested immediately. Security updates are exempt
-# from the cooldown by Dependabot's design. Majors are no longer ignored.
-
 updates:
-  - package-ecosystem: gomod
-    directory: /
+  # Every org repo runs actions; actions/* bumps (integer majors like v6 -> v7)
+  # land outside the group as individual judgment PRs.
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: weekly
-    cooldown:
-      default-days: 7
+      interval: "weekly"
     groups:
       minor-and-patch:
         update-types:
-          - minor
-          - patch
+          - "version-update:semver-minor"
+          - "version-update:semver-patch"
 
-  - package-ecosystem: github-actions
-    directory: /
+  - package-ecosystem: "go_modules"
+    directory: "/"
     schedule:
-      interval: weekly
-    cooldown:
-      default-days: 7
+      interval: "weekly"
     groups:
       minor-and-patch:
         update-types:
-          - minor
-          - patch
+          - "version-update:semver-minor"
+          - "version-update:semver-patch"
