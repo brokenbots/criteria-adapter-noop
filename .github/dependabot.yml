@@ -7,26 +7,31 @@
 #   - majors stay OUTSIDE the group on purpose: they arrive as separate PRs and
 #     the devops_maint_v1 classify gate routes semver-major bumps to the
 #     needs_judgment lane — never auto-acted. Do not add a semver-major entry.
+#
+# Schema matches the org's proven working files (criteria et al): ecosystem
+# `gomod` with update-types [minor, patch]. A 7-day cooldown matches the org
+# supply-chain posture — a freshly published (possibly compromised) release is
+# not ingested immediately; security updates are exempt by design.
 version: 2
+
 updates:
   # Every org repo runs actions; actions/* bumps (integer majors like v6 -> v7)
   # land outside the group as individual judgment PRs.
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "weekly"
-    groups:
-      minor-and-patch:
-        update-types:
-          - "version-update:semver-minor"
-          - "version-update:semver-patch"
+      interval: weekly
+    cooldown:
+      default-days: 7
 
-  - package-ecosystem: "go_modules"
-    directory: "/"
+  - package-ecosystem: gomod
+    directory: /
     schedule:
-      interval: "weekly"
+      interval: weekly
+    cooldown:
+      default-days: 7
     groups:
       minor-and-patch:
         update-types:
-          - "version-update:semver-minor"
-          - "version-update:semver-patch"
+          - minor
+          - patch
