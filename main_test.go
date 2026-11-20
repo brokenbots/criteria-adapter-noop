@@ -5,12 +5,21 @@ import (
 	"testing"
 
 	v2 "github.com/brokenbots/criteria-adapter-proto/criteria/v2"
+	adapterhost "github.com/brokenbots/criteria-go-adapter-sdk/adapterhost"
 )
 
 // captureSink collects events emitted by Execute.
 type captureSink struct{ events []*v2.ExecuteEvent }
 
 func (c *captureSink) Send(e *v2.ExecuteEvent) error {
+	c.events = append(c.events, e)
+	return nil
+}
+
+// captureLogSender collects events emitted by Log.
+type captureLogSender struct{ events []*v2.LogEvent }
+
+func (c *captureLogSender) Send(e *v2.LogEvent) error {
 	c.events = append(c.events, e)
 	return nil
 }
@@ -28,6 +37,20 @@ func TestInfo(t *testing.T) {
 	}
 	if len(resp.GetPlatforms()) == 0 {
 		t.Error("platforms must be set for a multi-arch publish")
+	}
+
+	// The capabilities gate which host features the adapter may use: the
+	// tool-call caller mode requires adapter_tools on top of parallel_safe
+	// (CRI-159).
+	caps := map[string]bool{}
+	for _, c := range resp.GetCapabilities() {
+		caps[c] = true
+	}
+	if !caps["parallel_safe"] {
+		t.Error("capabilities must include parallel_safe")
+	}
+	if !caps[adapterhost.CapabilityAdapterTools] {
+		t.Error("capabilities must include adapter_tools for the tool-call caller mode")
 	}
 }
 
@@ -71,5 +94,25 @@ func TestExecuteInvalidDelay(t *testing.T) {
 	}
 	if err := s.Execute(ctx, &v2.ExecuteRequest{SessionId: "s", Input: map[string]string{"delay_ms": "-1"}}, &captureSink{}); err == nil {
 		t.Fatal("expected error for negative delay_ms")
+	}
+}
+
+// TestLogReturnsPromptly pins the SDK-owned log-stream contract: the adapter's
+// Log returns immediately and never emits log events; the SDK keeps the
+// stream and its heartbeat alive for the full session lifetime.
+func TestLogReturnsPromptly(t *testing.T) {
+	s := &noopService{sessions: map[string]struct{}{}}
+	const sid = "s1"
+	ctx := context.Background()
+	if _, err := s.OpenSession(ctx, &v2.OpenSessionRequest{SessionId: sid}); err != nil {
+		t.Fatalf("OpenSession: %v", err)
+	}
+
+	sender := &captureLogSender{}
+	if err := s.Log(ctx, &v2.LogRequest{SessionId: sid}, sender); err != nil {
+		t.Fatalf("Log: %v", err)
+	}
+	if len(sender.events) != 0 {
+		t.Errorf("Log emitted %d events, want 0 (the SDK owns heartbeats)", len(sender.events))
 	}
 }

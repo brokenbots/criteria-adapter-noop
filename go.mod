@@ -1,10 +1,11 @@
 module github.com/brokenbots/criteria-adapter-noop
 
-go 1.26.3
+go 1.26.11
 
 require (
-	github.com/brokenbots/criteria-adapter-proto v0.5.1
-	github.com/brokenbots/criteria-go-adapter-sdk v0.5.2
+	github.com/brokenbots/criteria-adapter-proto v0.5.2-0.20260915031317-3884049505b7
+	github.com/brokenbots/criteria-go-adapter-sdk v0.5.4-0.20260915131542-b21155c84cd5
+	google.golang.org/protobuf v1.36.11
 )
 
 require (
@@ -16,10 +17,9 @@ require (
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/oklog/run v1.1.0 // indirect
-	golang.org/x/net v0.51.0 // indirect
-	golang.org/x/sys v0.42.0 // indirect
-	golang.org/x/text v0.34.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260226221140-a57be14db171 // indirect
-	google.golang.org/grpc v1.81.1 // indirect
-	google.golang.org/protobuf v1.36.11 // indirect
+	golang.org/x/net v0.62.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/text v0.43.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
+	google.golang.org/grpc v1.83.2 // indirect
 )
