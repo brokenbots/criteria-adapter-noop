@@ -3,9 +3,9 @@ module github.com/brokenbots/criteria-adapter-noop
 go 1.26.11
 
 require (
-	github.com/brokenbots/criteria-adapter-proto v0.5.2-0.20260915031317-3884049505b7
-	github.com/brokenbots/criteria-go-adapter-sdk v0.5.4-0.20260915131542-b21155c84cd5
-	google.golang.org/protobuf v1.36.11
+	github.com/brokenbots/criteria-adapter-proto v0.8.0
+	github.com/brokenbots/criteria-go-adapter-sdk v0.7.0
+	google.golang.org/protobuf v1.36.12
 )
 
 require (
