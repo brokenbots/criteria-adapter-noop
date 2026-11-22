@@ -1,7 +1,7 @@
-github.com/brokenbots/criteria-adapter-proto v0.5.2-0.20260915031317-3884049505b7 h1:22YAzlmp+QpZXKdWxFZ08PL2uJKb2NdxSg4EXAiQum4=
-github.com/brokenbots/criteria-adapter-proto v0.5.2-0.20260915031317-3884049505b7/go.mod h1:JeoJ2SvxmswXrsd3N2ohhhG8XuNDKL63yxRnJWT6PnU=
-github.com/brokenbots/criteria-go-adapter-sdk v0.5.4-0.20260915131542-b21155c84cd5 h1:RhylUaP4i9n8yES6EJOLReK/zchThkQAlaT/9vmaDoI=
-github.com/brokenbots/criteria-go-adapter-sdk v0.5.4-0.20260915131542-b21155c84cd5/go.mod h1:NpK73UD4ypr3wsyt17n0aK8HQyZfZdOkccdamgP1/M0=
+github.com/brokenbots/criteria-adapter-proto v0.8.0 h1:8uhlCH5mfTtQ8vSKyOX4/HbEt8K6WANnSmFE7Bd5JAo=
+github.com/brokenbots/criteria-adapter-proto v0.8.0/go.mod h1:uFZSfIEuoEoeYXqp9jPjt3DAFH07rflFsfcWvaMLQVk=
+github.com/brokenbots/criteria-go-adapter-sdk v0.7.0 h1:9EqV22EOMUx0T12OKri1yYHULCeg/yqARfEsiyzs8Io=
+github.com/brokenbots/criteria-go-adapter-sdk v0.7.0/go.mod h1:9f5rIkFeeY9L4jLNMiK0D5RIFwA4peyAAnuA5dT9DEo=
 github.com/bufbuild/protocompile v0.14.1 h1:iA73zAf/fyljNjQKwYzUHD6AD4R8KMasmwa/FBatYVw=
 github.com/bufbuild/protocompile v0.14.1/go.mod h1:ppVdAIhbr2H8asPk6k4pY7t9zB1OU5DoEw9xY/FUi1c=
 github.com/cespare/xxhash/v2 v2.3.0 h1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UFvs=
@@ -74,8 +74,8 @@ google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa h1:
 google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa/go.mod h1:4Hqkh8ycfw05ld/3BWL7rJOSfebL2Q+DVDeRgYgxUU8=
 google.golang.org/grpc v1.83.2 h1:EManeRomTObA0BU7I8vXgg/78uE5MJ9M8B39EX2WscU=
 google.golang.org/grpc v1.83.2/go.mod h1:YPI1hK3kDked6iHvgX3tR0y+nX/qpMFKhPgFsokw1S8=
-google.golang.org/protobuf v1.36.11 h1:fV6ZwhNocDyBLK0dj+fg8ektcVegBBuEolpbTQyBNVE=
-google.golang.org/protobuf v1.36.11/go.mod h1:HTf+CrKn2C3g5S8VImy6tdcUvCska2kB7j23XfzDpco=
+google.golang.org/protobuf v1.36.12 h1:pJOKDDOyeXErUroCihFAd5LQuwXBSpVnKGrj5o/fwxc=
+google.golang.org/protobuf v1.36.12/go.mod h1:HTf+CrKn2C3g5S8VImy6tdcUvCska2kB7j23XfzDpco=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
